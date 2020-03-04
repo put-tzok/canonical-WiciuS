@@ -20,7 +20,29 @@ class DotBracket:
     @staticmethod
     def from_string(sequence, structure):
         # TODO: implement this
+        structure_copy = structure
         pairs = []
+        sign_start = ['(', '[', '{', '<']
+        sign_end = [')', ']', '}', '>']
+        for sign in structure_copy:
+            print(pairs)
+            if sign == sign_start[0]:
+                pairs.append((structure_copy.find(sign), structure_copy.find(sign_end[0])))
+                structure_copy[structure_copy.find(sign)] = 0
+                structure_copy[structure_copy.find(sign_end[0])] = 0
+            elif sign == sign_start[1]:
+                pairs.append((structure_copy.find(sign), structure_copy.find(sign_end[1])))
+                structure_copy[structure_copy.find(sign)] = 0
+                structure_copy[structure_copy.find(sign_end[1])] = 0
+            elif sign == sign_start[2]:
+                pairs.append((structure_copy.find(sign), structure_copy.find(sign_end[2])))
+                structure_copy[structure_copy.find(sign)] = 0
+                structure_copy[structure_copy.find(sign_end[2])] = 0
+            elif sign == sign_start[3]:
+                pairs.append((structure_copy.find(sign), structure_copy.find(sign_end[3])))
+                structure_copy[structure_copy.find(sign)] = 0
+                structure_copy[structure_copy.find(sign_end[3])] = 0
+            
         return DotBracket(sequence, structure, pairs)
 
     def __init__(self, sequence, structure, pairs):
@@ -89,6 +111,10 @@ def generate_test_function(json_path):
             data = json.load(json_file)
         sequence = ''.join(data['dbn']['all_chains']['bseq'].split('&'))
         structure = ''.join(data['dbn']['all_chains']['sstr'].split('&'))
+        
+        print(sequence)
+        print(structure)
+        
         dot_bracket = DotBracket.from_string(sequence, structure)
         bpseq1 = dot_bracket.to_bpseq()
 
@@ -104,4 +130,5 @@ if __name__ == '__main__':
     suite = unittest.TestSuite()
     for json_path in glob.iglob('data/????.json'):
         suite.addTest(unittest.FunctionTestCase(generate_test_function(json_path)))
+        
     unittest.TextTestRunner().run(suite)
